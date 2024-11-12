@@ -22,10 +22,10 @@ jobs:
         dotnet-version: '6.0.x'
 
     - name: Install Dependencies
-      run: dotnet restore "src/RuleOneApi.csproj"
+      run: dotnet restore "RuleOneApi/RuleOneApi.csproj"
 
     - name: Build
-      run: dotnet build --no-restore "src/RuleOneApi.csproj"
+      run: dotnet build --no-restore "RuleOneApi/RuleOneApi.csproj"
 
     - name: Run Tests
       run: dotnet test --no-build --verbosity normal

@@ -13,8 +13,4 @@
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
   </ItemGroup>
 
-  <ItemGroup>
-    <None Include=".github\workflows\ci-cd-pipeline.yml" />
-  </ItemGroup>
-
 </Project>
