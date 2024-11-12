@@ -1,0 +1,24 @@
+﻿apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ruleoneapi-deployment
+  labels:
+    app: ruleoneapi
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ruleoneapi
+  template:
+    metadata:
+      labels:
+        app: ruleoneapi
+    spec:
+      containers:
+      - name: ruleoneapi
+        image: mau555/ruleoneapi:latest
+        ports:
+        - containerPort: 80
+        env:
+        - name: ASPNETCORE_ENVIRONMENT
+          value: "Production"

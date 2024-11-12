@@ -7,6 +7,7 @@ namespace RuleOneApi.Controllers
 	[ApiController]
 	public class RuleOneController : ControllerBase
 	{
+
 		[HttpGet]
 		public ActionResult<string> Calculate(int input)
 		{
