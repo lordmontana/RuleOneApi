@@ -41,8 +41,8 @@ jobs:
         echo "$DOCKERHUB_PASSWORD" | docker login -u "$DOCKERHUB_USERNAME" --password-stdin
         docker push mau555/ruleoneapi:latest
 
-   # - name: Deploy to Kubernetes
-   #   env:
-   #     KUBECONFIG: ${{ secrets.KUBECONFIG }}
-   #   run: |
-   #     kubectl apply -f Kubernetes/deployment.yaml
+    - name: Deploy to Kubernetes
+      env:
+        KUBECONFIG: ${{ secrets.KUBECONFIG }}
+      run: |
+        kubectl apply -f Kubernetes/deployment.yaml
