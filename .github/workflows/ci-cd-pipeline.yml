@@ -40,11 +40,15 @@ jobs:
           echo "$DOCKERHUB_PASSWORD" | docker login -u "$DOCKERHUB_USERNAME" --password-stdin
           docker push mau555/ruleoneapi:latest
 
+      - name: List Files
+        run: ls -R
+
       - name: Deploy to Kubernetes
         env:
           KUBECONFIG: ${{ secrets.KUBECONFIG }}
         run: |
           echo "$KUBECONFIG" | base64 -d > /tmp/kubeconfig
           export KUBECONFIG=/tmp/kubeconfig
-          kubectl apply -f RuleOneApi/Kubernetes/deployment.yaml
+          kubectl apply -f Kubernetes/deployment.yaml
+
 
