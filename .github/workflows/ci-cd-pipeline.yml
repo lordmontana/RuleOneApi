@@ -46,4 +46,5 @@ jobs:
         run: |
           echo "$KUBECONFIG" | base64 -d > /tmp/kubeconfig
           export KUBECONFIG=/tmp/kubeconfig
-          kubectl apply -f Kubernetes/deployment.yaml
+          kubectl apply -f RuleOneApi/Kubernetes/deployment.yaml
+
