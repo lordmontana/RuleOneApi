@@ -43,6 +43,8 @@ jobs:
 
     - name: Deploy to Kubernetes
       env:
-        KUBECONFIG: ${{ secrets.KUBECONFIG }}
-      run: |
-        kubectl apply -f Kubernetes/deployment.yaml
+  KUBECONFIG: ${{ secrets.KUBECONFIG }}
+run: |
+  echo "${KUBECONFIG}" | base64 -d > /tmp/kubeconfig
+  export KUBECONFIG=/tmp/kubeconfig
+  kubectl apply -f Kubernetes/deployment.yaml
