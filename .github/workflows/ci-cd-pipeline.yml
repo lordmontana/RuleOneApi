@@ -11,40 +11,39 @@ on:
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
-
     steps:
-    - name: Checkout Code
-      uses: actions/checkout@v2
+      - name: Checkout Code
+        uses: actions/checkout@v2
 
-    - name: Set up .NET Core
-      uses: actions/setup-dotnet@v1
-      with:
-        dotnet-version: '6.0.x'
+      - name: Set up .NET Core
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: '6.0.x'
 
-    - name: Install Dependencies
-      run: dotnet restore "RuleOneApi/RuleOneApi.csproj"
+      - name: Install Dependencies
+        run: dotnet restore 'RuleOneApi/RuleOneApi.csproj'
 
-    - name: Build
-      run: dotnet build --no-restore "RuleOneApi/RuleOneApi.csproj"
+      - name: Build
+        run: dotnet build --no-restore 'RuleOneApi/RuleOneApi.csproj'
+        
+      - name: Run Tests
+        run: dotnet test --no-build --verbosity normal
 
-    - name: Run Tests
-      run: dotnet test --no-build --verbosity normal
+      - name: Build Docker Image
+        run: docker build -t mau555/ruleoneapi:latest -f RuleOneApi/Dockerfile .
 
-    - name: Build Docker Image
-      run: docker build -t mau555/ruleoneapi:latest -f RuleOneApi/Dockerfile .
+      - name: Push Docker Image
+        env:
+          DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
+          DOCKERHUB_PASSWORD: ${{ secrets.DOCKERHUB_PASSWORD }}
+        run: |
+          echo "$DOCKERHUB_PASSWORD" | docker login -u "$DOCKERHUB_USERNAME" --password-stdin
+          docker push mau555/ruleoneapi:latest
 
-    - name: Push Docker Image
-      env:
-        DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
-        DOCKERHUB_PASSWORD: ${{ secrets.DOCKERHUB_PASSWORD }}
-      run: |
-        echo "$DOCKERHUB_PASSWORD" | docker login -u "$DOCKERHUB_USERNAME" --password-stdin
-        docker push mau555/ruleoneapi:latest
-
-    - name: Deploy to Kubernetes
-      env:
-  KUBECONFIG: ${{ secrets.KUBECONFIG }}
-run: |
-  echo "${KUBECONFIG}" | base64 -d > /tmp/kubeconfig
-  export KUBECONFIG=/tmp/kubeconfig
-  kubectl apply -f Kubernetes/deployment.yaml
+      - name: Deploy to Kubernetes
+        env:
+          KUBECONFIG: ${{ secrets.KUBECONFIG }}
+        run: |
+          echo "$KUBECONFIG" | base64 -d > /tmp/kubeconfig
+          export KUBECONFIG=/tmp/kubeconfig
+          kubectl apply -f Kubernetes/deployment.yaml
